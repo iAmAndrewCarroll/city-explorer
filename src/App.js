@@ -1,25 +1,55 @@
-import logo from './logo.svg';
+import React from 'react';
+import axios from 'axios';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// class Header extends React.Component {
+//   render() {
+//     return <header>This is a test</header>;
+//   }
+// }
+
+class Main extends React.Component {
+  render() {
+    return <main></main>;
+  }
 }
+
+class Footer extends React.Component {
+  render() {
+    return <footer></footer>
+  }
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cityName: '',
+      cityData: {},
+      error: false,
+      errorMessage: ''
+    }
+  }
+
+
+render() {
+  return (
+    <>
+    <header />
+    <main />
+    <footer />
+    </>
+  )
+}
+
+}
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <h1>Adventurous Feet</h1>
+//     </div>
+//   );
+// }
 
 export default App;
