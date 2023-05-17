@@ -8,8 +8,11 @@ class App extends React.Component {
     this.state = {
       cityName: '',
       cityData: {},
+      lat: '',
+      lon: '',
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      weather: []
     }
   }
 
@@ -17,17 +20,21 @@ class App extends React.Component {
   // async, await, .data
 handleCitySubmit = async (event) => {
     event.preventDefault();
+
+    let cityData;
     
     try {
     let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ}&q=${this.state.cityName}&format=json`
 
     console.log(this.state.cityName)
     // this actually gets the data via the url from axios and location iq
-    let cityData = await axios.get(url);
+    cityData = await axios.get(url);
 
     console.log(cityData.data[0]);
     this.setState({
-      cityData: cityData.data[0]
+      cityData: cityData.data[0],
+      lat: cityData.data[0].lat,
+      lon: cityData.data[0].lon
     });
   } catch(error) {
     console.log('error: ', error);
@@ -37,6 +44,26 @@ handleCitySubmit = async (event) => {
       errorMessage: `An Error Occured: ${error.response.status}`
     });
   }
+  this.getWeather(this.state.lat, this.state.lon)
+  }
+
+  // this is an ASYNC FUNCTION that makes an API CALL
+  getWeather = async (lat, lon) => {
+    try {
+      const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, {
+        params: {cityName: this.state.cityName, lat: lat, lon: lon}});
+        this.setState({
+          weather: weather.data
+        })
+        console.log('weather from apiCall', weather)
+    } catch(error) {
+      console.log('error: ', error);
+      console.log('error.message: ', error.message);
+      this.setState({
+        error: true,
+        errorMessage: `An Error Occured: ${error.response.status}`
+      });
+    }    
   }
 
 changeCityInput = (event) => {
@@ -46,6 +73,8 @@ changeCityInput = (event) => {
   // the value won't be in state yet when this runs:
   // console.log(this.state.cityName)
 }
+
+
 
   render() {
     return(
