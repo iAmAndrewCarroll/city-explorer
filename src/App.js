@@ -45,7 +45,7 @@ handleCitySubmit = async (event) => {
       errorMessage: `An Error Occured: ${error.response.status}`
     });
   }
-  this.getWeather(this.state.lat, this.state.lon)
+  this.getWeather(cityData.data[0].lat, cityData.data[0].lon)
   }
 
   // this is an ASYNC FUNCTION that makes an API CALL
