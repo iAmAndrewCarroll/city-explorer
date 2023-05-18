@@ -1,6 +1,7 @@
 import React from 'react';
-import { Alert, Form, Button, Card } from 'react-bootstrap';
+import { Alert, Form, Button, Card, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import Weather from './Weather';
 
 class App extends React.Component {
   constructor(props) {
@@ -98,6 +99,7 @@ changeCityInput = (event) => {
             </Card.Body>
           </Card>
         }
+            <Weather weather = {this.state.weather} />
       </>
     )
   }
