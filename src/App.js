@@ -78,6 +78,7 @@ handleCitySubmit = async (event) => {
   getMovies = async () => {
     console.log('inside movies function')
     try {
+      console.log('this is the .env stuff', process.env.REACT_APP_SERVER)
       const movies = await axios.get(`${process.env.REACT_APP_SERVER}/movies?cityName=${this.state.cityName}`);
       console.log('this is the movies log', movies.data)
       this.setState({
