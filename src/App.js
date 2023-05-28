@@ -57,9 +57,10 @@ handleCitySubmit = async (event) => {
     console.log('inside the weather function')
     console.log('this is the url string: ', `${process.env.REACT_APP_SERVER}/weather`)
     try {
-      const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, {
-        params: {cityName: this.state.cityName, lat: lat, lon: lon}});
-        console.log('this is lat', lat)
+      const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather?cityName=${this.state.cityName}&lat=${lat}&lon=${lon}`);
+      // , {
+        // params: {cityName: this.state.cityName, lat: lat, lon: lon}});
+        // console.log('this is lat', lat)
         this.setState({
           weather: weather.data
         })
