@@ -1,6 +1,9 @@
 import React from 'react';
-import { Alert, Form, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
+import { Card } from 'react-bootstrap';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Button from 'react-bootstrap/Button'
 import Weather from './Weather';
 import Movies from './Movie';
 
@@ -11,19 +14,19 @@ class App extends React.Component {
     this.state = {
       cityName: '',
       cityData: {},
-      lat: '',
-      lon: '',
+      haveCityData: false,
       error: false,
       errorMessage: '',
       weather: [],
-      movies: []
+      movies: [],
+      lat: '',
+      lon: '',
     }
   }
 
   // 3 things you need when using axios
   // async, await, .data
 handleCitySubmit = async (event) => {
-  console.log('inside handleCitySubmit')
     event.preventDefault();
 
     let cityData;
@@ -78,7 +81,6 @@ handleCitySubmit = async (event) => {
   getMovies = async () => {
     console.log('inside movies function')
     try {
-      console.log('this is the .env stuff', process.env.REACT_APP_SERVER)
       const movies = await axios.get(`${process.env.REACT_APP_SERVER}/movies?cityName=${this.state.cityName}`);
       console.log('this is the movies log', movies.data)
       this.setState({
