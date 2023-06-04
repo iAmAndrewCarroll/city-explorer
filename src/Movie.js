@@ -1,24 +1,17 @@
-import React from 'react';
+import React from "react";
 import Card from 'react-bootstrap/Card'
+import MovieDay from "./MovieDay";
 
-class Movies extends React.Component {
+class Movie extends React.Component {
   render() {
     return (
       <>
-        {this.props.movies.map((movie, index) => (
-          <Card key={index} style={{ width: '18rem' }}>
-          <Card.Img variant="top" src={`https://image.tmdb.org/t/p/original${movie.image_url}`}/>
-          <Card.Body>
-            <Card.Title>{movie.title}</Card.Title>
-            <Card.Text>
-              {movie.overview}
-            </Card.Text>
-          </Card.Body>
-        </Card>
-        ))}
+        <Card.Title>{this.props.cityName} Movies</Card.Title>
+        <hr></hr>
+        <MovieDay movieData={this.props.movieData} />
       </>
-    );
+    )
   }
 }
 
-export default Movies
+export default Movie;
