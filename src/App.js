@@ -5,7 +5,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Button from 'react-bootstrap/Button'
 import Weather from './Weather';
-import Movies from './Movie';
+import Movie from './Movie';
+import Map from './Map'
 
 
 class App extends React.Component {
@@ -26,114 +27,119 @@ class App extends React.Component {
 
   // 3 things you need when using axios
   // async, await, .data
-handleCitySubmit = async (event) => {
+  handleCitySubmit = async (event) => {
     event.preventDefault();
-
-    let cityData;
-    
     try {
-    let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ}&q=${this.state.cityName}&format=json`
-
-    // this actually gets the data via the url from axios and location iq
-    cityData = await axios.get(url);
-
-    this.setState({
-      cityData: cityData.data[0],
-      lat: cityData.data[0].lat,
-      lon: cityData.data[0].lon
-    });
-
-  } catch(error) {
-    console.log('error: ', error);
-    console.log('error.message: ', error.message);
-    this.setState({
-      error: true,
-      errorMessage: `An Error Occured: ${error.response.status}`
-    });
-  }
-  this.getWeather(cityData.data[0].lat, cityData.data[0].lon);
-  this.getMovies();
-  }
-
-  // this is an ASYNC FUNCTION that makes an API CALL
-  getWeather = async (lat, lon) => {
-    console.log('inside the weather function')
-    console.log('this is the url string: ', `${process.env.REACT_APP_SERVER}/weather`)
-    try {
-      const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather?cityName=${this.state.cityName}&lat=${lat}&lon=${lon}`);
-      // , {
-        // params: {cityName: this.state.cityName, lat: lat, lon: lon}});
-        // console.log('this is lat', lat)
-        this.setState({
-          weather: weather.data
-        })
-        console.log('weatherArray', this.state.weather)
-    } catch(error) {
+      let cityUrl = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ}&q=${this.state.cityName}&format=json`;
+      let city = await axios.get(cityUrl);
+      this.setState({
+        Data1: city.data[0],
+        error: false,
+        haveCityData: true,
+        lat: city.data[0].lat,
+        lon: city.data[0].lon
+      });
+      // this.getWeather(city.data[0].lat, city.data[0].lon);
+      this.getMovie();
+    }
+    catch (error) {
       console.log('error: ', error);
       console.log('error.message: ', error.message);
       this.setState({
         error: true,
-        errorMessage: `An Error Occured: ${error.response.status}`
+        errorMessage: `An error Occured: ${error.response.status}`
       });
-    }    
+    }
   }
-  
-  getMovies = async () => {
-    console.log('inside movies function')
-    try {
-      const movies = await axios.get(`${process.env.REACT_APP_SERVER}/movies?cityName=${this.state.cityName}`);
-      console.log('this is the movies log', movies.data)
-      this.setState({
-        movies: movies.data
-      })
-      console.log('moviesArray', this.state.movies)
-    } catch (error) {
-    console.log('error: ', error);
-      console.log('error.message: ', error.message);
-      this.setState({
-        error: true,
-        errorMessage: `An Error Occured: ${error.response.status}`
-      });
-  }
-}
 
-changeCityInput = (event) => {
-  this.setState({
-    cityName: event.target.value
-  });
-  // the value won't be in state yet when this runs:
-  // console.log(this.state.cityName)
-}
+  getWeather = async (lat, lon) => {
+    try {
+      // let { lat, lon } = this.state.Data1;
+      let weatherUrl = `${process.env.REACT_APP_SERVER}/weather?cityData=${this.state.cityName}&lat=${lat}&lon=${lon}`;
+      let weatherResponse = await axios.get(weatherUrl);
+      // console.log(weatherResponse.data)
+      let weatherData = weatherResponse.data;
+      this.setState({
+        weatherData
+      })
+      // console.log('Date:', date);
+      // console.log('Description:', description);
+    } catch (error) {
+      console.log('Error getting weather: ', error);
+    }
+  };
+
+  getMovie = async () => {
+    let movieURL = `${process.env.REACT_APP_SERVER}/movies?cityName=${this.state.cityName}`;
+    console.log(movieURL);
+    try {
+      let movieResponse = await axios.get(movieURL);
+      console.log(movieResponse.data)
+
+      this.setState({
+        movieData: movieResponse.data
+      })
+
+    } catch (error) {
+      console.log('Error getting movie: ', error);
+    }
+  };
+
+
+  changeCityInput = (event) => {
+    this.setState({
+      cityName: event.target.value
+    });
+    // the value won't be in state yet when this runs:
+    // console.log(this.state.cityName)
+  }
 
 
 
   render() {
-    return(
+    console.log('This is the MovieData: ', this.state.movieData)
+    return (
       <>
-        <h1>City Explorer</h1>
-        <Form onSubmit={this.handleCitySubmit}>
-          <Form.Label>Quest For A City:
-            <Form.Control name="city" onChange={this.changeCityInput}/>
-          </Form.Label>
-          <Button type="submit">Get City Info!</Button>
-        </Form>
-        {
-          this.state.error
-            ? <Alert variant="danger">{this.state.errorMessage}</Alert>
-            : <Card>
-            <Card.Img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ}&center=${this.state.cityData.lat},${this.state.cityData.lon}&zoom=12`} alt={this.state.cityData.display_name}/>
-            <Card.Title>{this.state.cityData.display_name}</Card.Title>
-            <Card.Body>
-              <Card.Text>Latitude: {this.state.cityData.lat}</Card.Text>
-              <Card.Text>Longitude: {this.state.cityData.lon}</Card.Text>
-            </Card.Body>
-          </Card>
-
+        <header>
+          <h1>Data from an API</h1>
+          <form onSubmit={this.handleCitySubmit}>
+            <label>
+              <input name="city" onChange={this.changeCityInput} />
+            </label>
+            <Button type="submit" className="button">Explore!</Button>
+          </form>
+        </header>
+        {this.state.error ? <p>{this.state.errorMessage}</p> :
+          this.state.haveCityData &&
+          <main>
+            <Map
+                  img_url={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ}&center=${this.state.Data1.lat},${this.state.Data1.lon}&size=${window.innerWidth}x300&format=jpg&zoom=12`}
+                  city={this.state.location}
+                />
+            <Card className='City' style={{ width: '75%' }}>
+            {/* <Card.Img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ}&center=${this.state.Data1.lat},${this.state.Data1.lon}&zoom=12`} alt="" /> */}
+              <Card.Body>
+                <Card.Title>{this.state.cityName}</Card.Title>
+                <Card.Text>Lat: {this.state.Data1.lat}</Card.Text>
+                <Card.Text>Lon: {this.state.Data1.lon}</Card.Text>
+                {/* < Weather
+                  weatherData={this.state.weatherData}
+                  cityName={this.state.cityName}
+                /> */}
+                {/* {this.state.movieData.length > 0 && <Movie
+                  movieData={this.state.movieData}
+                />} */}
+                {this.state.movieData ? 
+                (<Movie movieData={this.state.movieData} />
+                ) : (
+                  <p>Loading Movie Data...</p>
+                )}
+              </Card.Body>
+            </Card>
+            </main>
         }
-            <Weather weather = {this.state.weather} />
-            <Movies movies = {this.state.movies} />
       </>
-    )
+    );
   }
 
 }
