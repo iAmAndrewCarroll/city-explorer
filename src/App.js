@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Card } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Button from 'react-bootstrap/Button'
@@ -102,12 +102,12 @@ class App extends React.Component {
       <>
         <header>
           <h1>Data from an API</h1>
-          <form onSubmit={this.handleCitySubmit}>
+          <Form onSubmit={this.handleCitySubmit}>
             <label>
               <input name="city" onChange={this.changeCityInput} />
             </label>
             <Button type="submit" className="button">Explore!</Button>
-          </form>
+          </Form>
         </header>
         {this.state.error ? <p>{this.state.errorMessage}</p> :
           this.state.haveCityData &&
@@ -117,18 +117,14 @@ class App extends React.Component {
                   city={this.state.location}
                 />
             <Card className='City' style={{ width: '75%' }}>
-            {/* <Card.Img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ}&center=${this.state.Data1.lat},${this.state.Data1.lon}&zoom=12`} alt="" /> */}
               <Card.Body>
                 <Card.Title>{this.state.cityName}</Card.Title>
                 <Card.Text>Lat: {this.state.Data1.lat}</Card.Text>
                 <Card.Text>Lon: {this.state.Data1.lon}</Card.Text>
-                {/* < Weather
+                < Weather
                   weatherData={this.state.weatherData}
                   cityName={this.state.cityName}
-                /> */}
-                {/* {this.state.movieData.length > 0 && <Movie
-                  movieData={this.state.movieData}
-                />} */}
+                />
                 {this.state.movieData ? 
                 (<Movie movieData={this.state.movieData} />
                 ) : (
@@ -145,19 +141,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-/*
-
-Endpoint:
-
-GET: https://maps.locationiq.com/v3/staticmap
-
-Query parameters:
-
-key: Authentication key
-center: Defines the center of the map. It takes a comma separated value of a latitude, longitude pair.
-zoom: 1-18
-
-Example Response: PNG image
-
-*/
