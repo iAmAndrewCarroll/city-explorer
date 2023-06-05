@@ -12,7 +12,6 @@ class WeatherDay extends React.Component {
               <Card.Text>Forecast: {day.forecast}</Card.Text>
               <Card.Text>High of: {day.high}</Card.Text>
               <Card.Text>Low of: {day.low}</Card.Text>
-              {/* <hr></hr> */}
             </Card>
           )
         ) : (

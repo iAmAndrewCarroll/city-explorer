@@ -8,7 +8,6 @@ import Weather from './Weather';
 import Movie from './Movie';
 import Map from './Map'
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -25,8 +24,6 @@ class App extends React.Component {
     }
   }
 
-  // 3 things you need when using axios
-  // async, await, .data
   handleCitySubmit = async (event) => {
     event.preventDefault();
     try {
@@ -39,7 +36,7 @@ class App extends React.Component {
         lat: city.data[0].lat,
         lon: city.data[0].lon
       });
-      // this.getWeather(city.data[0].lat, city.data[0].lon);
+      this.getWeather(city.data[0].lat, city.data[0].lon);
       this.getMovie();
     }
     catch (error) {
@@ -54,16 +51,12 @@ class App extends React.Component {
 
   getWeather = async (lat, lon) => {
     try {
-      // let { lat, lon } = this.state.Data1;
       let weatherUrl = `${process.env.REACT_APP_SERVER}/weather?cityData=${this.state.cityName}&lat=${lat}&lon=${lon}`;
       let weatherResponse = await axios.get(weatherUrl);
-      // console.log(weatherResponse.data)
       let weatherData = weatherResponse.data;
       this.setState({
         weatherData
       })
-      // console.log('Date:', date);
-      // console.log('Description:', description);
     } catch (error) {
       console.log('Error getting weather: ', error);
     }
@@ -90,11 +83,7 @@ class App extends React.Component {
     this.setState({
       cityName: event.target.value
     });
-    // the value won't be in state yet when this runs:
-    // console.log(this.state.cityName)
   }
-
-
 
   render() {
     console.log('This is the MovieData: ', this.state.movieData)
