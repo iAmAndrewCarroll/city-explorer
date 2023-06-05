@@ -8,7 +8,9 @@ class Movie extends React.Component {
       <>
         <Card.Title>{this.props.cityName} Movies</Card.Title>
         <hr></hr>
-        <MovieDay movieData={this.props.movieData} />
+        {this.props.movieData.length && this.props.movieData.map((movie, idx) => (
+          <MovieDay key={idx} movieData={movie} />
+        ))}
       </>
     )
   }

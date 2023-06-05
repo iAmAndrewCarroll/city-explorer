@@ -86,7 +86,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('This is the MovieData: ', this.state.movieData)
     return (
       <>
         <header>
